@@ -66,12 +66,17 @@ public class MainActivity extends AppCompatActivity {
         createBadges();
         EditTextUtils.addTextListener(binding.searchLayout.searchText, query -> viewModel.updateSearchText(query.toString()));
         EditTextUtils.debounce(binding.searchLayout.searchText, query -> viewModel.search());
-        binding.searchLayout.resetButton.setOnClickListener(view -> clearSearch());
+        binding.searchLayout.resetButton.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    clearSearch();
+                                                                }
+                                                            });
 
-        getSupportFragmentManager().setFragmentResultListener(SortDialogFragment.REQUEST_KEY, this, (requestKey, result) -> {
-            final SortType newSortType = SortDialogFragment.from(result);
-            viewModel.updateSortType(newSortType);
-        });
+                getSupportFragmentManager().setFragmentResultListener(SortDialogFragment.REQUEST_KEY, this, (requestKey, result) -> {
+                    final SortType newSortType = SortDialogFragment.from(result);
+                    viewModel.updateSortType(newSortType);
+                });
 
         getSupportFragmentManager().setFragmentResultListener(FilterContactTypeDialogFragment.REQUEST_KEY, this, (requestKey, result) -> {
             final Set<ContactType> newFilterContactTypes = FilterContactTypeDialogFragment.from(result);
